@@ -66,7 +66,7 @@ setTimeout(function () {
     zipFeedback.id = 'zipFeedback';
     zipFeedback.style.fontSize = '0.9em';
     zipFeedback.style.lineHeight = 1;
-    zipFeedback.style.marginTop = '36px';
+    zipFeedback.style.marginTop = '12px';
     zipCodeInput.insertAdjacentElement('afterend', zipFeedback);
   }
 

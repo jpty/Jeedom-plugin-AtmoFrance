@@ -230,6 +230,9 @@ class AtmoFrance extends eqLogic {
         $Cmd->setLogicalId($id); $Cmd->setEqLogic_id($this->getId());
         $Cmd->setType('info'); $Cmd->setSubType('string');
         $Cmd->setOrder($order++);
+        $Cmd->setTemplate('dashboard', __CLASS__ .'::lineJpty');
+        $Cmd->setTemplate('mobile', __CLASS__ .'::lineJpty');
+        $Cmd->setDisplay('parameters', array('type' => 'datetime'));
         $Cmd->save();
       }
       $id = "aasqa"; $Cmd = $this->getCmd(null, $id); // Associations Agréées de Surveillance de la Qualité de l’Air
@@ -295,6 +298,7 @@ class AtmoFrance extends eqLogic {
           $Cmd->setType('info'); $Cmd->setSubType('string');
           $Cmd->setTemplate('dashboard', __CLASS__ .'::lineJpty');
           $Cmd->setTemplate('mobile', __CLASS__ .'::lineJpty');
+          $Cmd->setDisplay('parameters', array('type' => 'datetime'));
           $Cmd->setOrder($order++);
           $Cmd->save();
         }
