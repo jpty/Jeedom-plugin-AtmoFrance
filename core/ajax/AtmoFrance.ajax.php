@@ -27,7 +27,7 @@ try {
     ajax::init();
 
   if (init('action') == 'getInsee') {
-    message::add('AtmoFrance', "getInsee");
+    // message::add('AtmoFrance', "getInsee");
     $zipCode = init('zipCode');
     if (!preg_match('/^\d{5}$/', $zipCode)) {
         ajax::error('Code postal invalide');
