@@ -52,20 +52,48 @@ tr += '<td><span class="cmdAttr" data-l1key="htmlstate"></span></td>';
   jeedom.cmd.changeType($('#table_cmd tbody tr').last(), init(_cmd.subType));
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+setTimeout(function () {
   const btnGetInsee = document.getElementById('btnGetInsee');
   const zipCodeInput = document.getElementById('zipCode');
   const selectCodeZone = document.getElementById('codeZone');
 
   if (!btnGetInsee || !zipCodeInput || !selectCodeZone) return;
 
+  // Création du conteneur de message s’il n'existe pas
+  let zipFeedback = document.getElementById('zipFeedback');
+  if (!zipFeedback) {
+    zipFeedback = document.createElement('div');
+    zipFeedback.id = 'zipFeedback';
+    zipFeedback.style.fontSize = '0.9em';
+    zipFeedback.style.lineHeight = 1;
+    zipFeedback.style.marginTop = '36px';
+    zipCodeInput.insertAdjacentElement('afterend', zipFeedback);
+  }
+
   function isValidFrenchZip(zip) {
     return /^\d{5}$/.test(zip);
   }
 
+  function showZipError(message) {
+    zipCodeInput.style.border = '2px solid red';
+    zipCodeInput.style.setProperty('box-shadow', '0 0 5px red', 'important');
+    zipCodeInput.style.outline = 'none';
+    zipFeedback.innerText = '❌ ' + message;
+    zipFeedback.style.color = 'red';
+    zipFeedback.style.display = 'block';
+  }
+
+  function clearZipFeedback() {
+    zipCodeInput.style.border = '';
+    zipCodeInput.style.removeProperty('box-shadow');
+    zipCodeInput.style.outline = '';
+    zipFeedback.innerText = '';
+    zipFeedback.style.display = 'none';
+  }
+
   function fetchInsee(zipCode) {
     if (!isValidFrenchZip(zipCode)) {
-      alert('Le code postal doit contenir exactement 5 chiffres.');
+      showZipError('Code postal sur 5 chiffres.');
       return;
     }
 
@@ -86,13 +114,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         selectCodeZone.innerHTML = '';
 
-        if (data.result.length == 0) {
-          const opt = new Option('Pas de commune trouvée pour ce code postal.', '');
-          selectCodeZone.appendChild(opt);
-        }
-        else if (data.result.length > 1) {
-          const opt = new Option('Sélectionner une commune.', '');
-          selectCodeZone.appendChild(opt);
+        if (data.result.length > 1) {
+          selectCodeZone.appendChild(new Option('Sélectionner une commune.', ''));
         }
 
         data.result.forEach(commune => {
@@ -113,12 +136,25 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchInsee(zipCode);
   });
 
-  zipCodeInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
+  zipCodeInput.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
       const zip = zipCodeInput.value.trim();
       fetchInsee(zip);
     }
   });
-});
 
+  zipCodeInput.addEventListener('input', clearZipFeedback);
+
+}, 1000);
+
+/*
+  document.addEventListener('keydown', function(event) {
+    if (event.target && event.target.id === 'zipCode' && event.key === 'Enter') {
+        const texteSaisi = event.target.value;
+        console.log('Code postal saisi (Enter) via délégation (document):', texteSaisi);
+        // traiterCodePostal(texteSaisi);
+        event.preventDefault();
+    }
+  });
+*/

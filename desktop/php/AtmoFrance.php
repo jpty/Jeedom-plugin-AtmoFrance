@@ -145,9 +145,9 @@ $id = $_GET['id'] ?? -1;
               </label>
               <div class="col-sm-4 input-group">
                 <input id="zipCode" type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="zipCode"/>
-                <span class="input-group-btn">
-                  <button type="button" class="btn btn-default" id="btnGetInsee">Rechercher commune</button>
-</span>
+                <span class="input-group-btn" style="vertical-align:top">
+                  <button title="Rechercher INSEE" type="button" class="btn btn-default" id="btnGetInsee"><i class="icon fas fa-search"></i></button>
+                </span>
               </div>
             </div>
 
