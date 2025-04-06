@@ -1,0 +1,16 @@
+{
+	"id" : "AtmoFrance",
+	"name" : "Atmo France Pollens et AQI",
+	"description" : "Plugin pour récupération des pollens et des polluants",
+	"licence" : "AGPL",
+	"author" : "jpty",
+	"require" : "3.3",
+	"category" : "weather",
+	"hasDependency" : false,
+	"hasOwnDeamon" : false,
+	"maxDependancyInstallTime" : 0,
+	"changelog" : "https://jpty.github.io/jeedom/plugins/AtmoFrance/#language#/changelog.html",
+	"documentation" : "https://jpty.github.io/jeedom/plugins/AtmoFrance/#language#/index.html",
+	"language" : ["fr_FR"],
+	"compatibility" : ["miniplus","smart","rpi","diy","mobile"]
+}
