@@ -40,7 +40,7 @@ class AtmoFrance extends eqLogic {
     }
   }
   public static function cron() {
-    if(date('H') > 15) { // Apres 15h
+    if(date('H') >= 15) { // Apres 15h
       $minute = date('i');
       $minuteRecup = config::byKey('minuteRecup', __CLASS__, -1);
       if($minuteRecup == -1) {
@@ -420,7 +420,7 @@ class AtmoFrance extends eqLogic {
     $refresh->setOrder(0);
     $refresh->save();
 
-    $this->getInformation();
+    // $this->getInformation();
   }
   
   public function getResource($params, $api) {
