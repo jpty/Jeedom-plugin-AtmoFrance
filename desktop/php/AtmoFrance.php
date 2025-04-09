@@ -136,7 +136,7 @@ $id = $_GET['id'] ?? -1;
               <div class="col-sm-4">
                 <select id="sel_object" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="typeEquipment">
                   <option value="pollens">Pollens</option>
-                  <option value="aqi">AQI</option>
+                  <!-- <option value="aqi">AQI</option> -->
                 </select>
               </div>
             </div>
