@@ -1,66 +1,36 @@
 <div style="margin:0px;padding:0px;min-width:60px" class="cmd #history# tooltips cmd-widget" data-type="info" data-version="#version#" data-eqLogic_id="#eqLogic_id#" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#">
-  <div class="cmdName #hide_name#">#name_display#</div>
-  <div class="led#id#" style="width:14px;height:14px;"></div>
+  <div class="content-xs">
+    <div class="cmdName #hide_name#">#name_display#</div>
+  </div>
+  <div class="pollen#id#"></div>
   <template>
-    <div>blink: {{Niveau à partir duquel la puce doit clignoter. Défaut: 6}}</div>
-    <div>colorDef: {{Couleur de la led si valeur de la commande < 0 ou >= 6. Défaut: #838383}}</div>
-    <div>ledSize: {{Taille de la led. Défaut: 14px}}</div>
-    <div>ledOffset: {{Taille du cercle autour de la led. Défaut: 6px}}</div>
+    <div>iconSize: {{Taille de l'icone. Défaut: 36}}</div>
+    <div>language: la langue du navigateur par défaut</div>
   </template>
-  <style>
-    @keyframes animBlur#id# {
-      0% { filter: blur( 0.0vmin) }
-      50% { filter: blur( 2.5vmin) }
-    }
-    @keyframes blinker#id# {
-      from {
-        opacity: 1.0;
-      }
-      to {
-        opacity: 0.0;
-      }
-    }
-    .led#id# {
-      position: relative;
-      margin: 1em;
-      border-radius: 50%;
-      color: #fff;
-      background: #838383;
-      border: 1px solid #838383;
-      text-align: center;
-    }
-  </style>
   <script>
-    function changeAfterColor#id#(newBorderColor, offset) {
-      let style = document.createElement('style');
-      document.head.appendChild(style);
-      style.sheet.insertRule('.led#id#::after { content:"";position:absolute;inset:'+ offset +';border-radius:50%;border:1px solid ' +newBorderColor +';}');
-    }
-
     jeedom.cmd.addUpdateFunction('#id#',function(_options) {
-      let blink#id# = ('#blink#' != '#' + 'blink#') ? parseInt("#blink#") : 6;
-      const desc = [ 'Indisponible', 'Trés faible', 'Faible', 'Modéré', 'Elevé', 'Trés élevé', 'Extrêmement élevé'];
-      const colors = [ '#DDDDDD', '#50F0E6', '#50CCAA', '#F0E641', '#FF5050', '#960032', '#872181'];
-      let colorDef#id# = ('#colorDef#' != '#' + 'colorDef#') ? '#colorDef#' : '#838383'; // gris
-      let ledOffset#id# = ('#ledOffset#' != '#' + 'ledOffset#') ? '-#ledOffset#' : '-6px';
-      let ledSize#id# = ('#ledSize#' != '#' + 'ledSize#') ? '#ledSize#' : '14px';
+      const desc = [ 'Indisponible', 'Trés faible', 'Faible', 'Modéré', 'Elevé', 'Trés élevé', 'Extrêmement élevé', 'Fin de saison pollinique'];
+      let iconSize#id# = ('#iconSize#' != '#' + 'iconSize#') ? '#iconSize#' : '36';
       if (is_object(cmd = document.querySelector('.cmd[data-cmd_uid="#uid#"]'))) {
+        let language = [];
+        if ('#'+'language#' != '#language#') language = '#language#';
+        let vDateTxt = new Date(_options.valueDate).toLocaleString(language, {dateStyle: "full",timeStyle: "medium"});
+        let cDateTxt = new Date(_options.collectDate).toLocaleString(language, {dateStyle: "full",timeStyle: "medium"});
+        cmd.querySelector('.content-xs').setAttribute('title', '{{Date de valeur}}: ' + vDateTxt + '<br>{{Date de collecte}}: ' + cDateTxt)
         let valeur = _options.display_value;
-        let cmdLed#id# = cmd.querySelector('.led#id#');
-        cmdLed#id#.style.width = ledSize#id#;
-        cmdLed#id#.style.height = ledSize#id#;
-        cmdLed#id#.style.animation = 'none';
-        if (valeur >= 0 && valeur < 7) {
-          cmdLed#id#.style.background = colors[valeur];
-          cmdLed#id#.style.border = '2px solid ' +colors[valeur];
-          cmdLed#id#.title = desc[valeur];
-          changeAfterColor#id#(colors[valeur],ledOffset#id#);
-          if (valeur >= blink#id#) cmdLed#id#.style.animation = 'blinker#id# linear 1s infinite';
+        let cmdIcon#id# = cmd.querySelector('.pollen#id#');
+        cmdIcon#id#.style.width = iconSize#id#;
+        cmdIcon#id#.style.height = iconSize#id#;
+        cmdIcon#id#.style.animation = 'none';
+        if (valeur >= 0 && valeur < 8) {
+          cmdIcon#id#.title = desc[valeur];
+          const imgElement = document.createElement('img');
+          imgElement.src = 'plugins/AtmoFrance/core/template/images/indice_interpollen_'+valeur+'.svg';
+          imgElement.width = iconSize#id#;
+          imgElement.height = iconSize#id#;
+          cmdIcon#id#.appendChild(imgElement);
         }
         else {
-          cmdLed#id#.style.background = colorDef#id#;
-          cmdLed#id#.style.border = '2px solid ' +colorDef#id#;
-          changeAfterColor#id#(colorDef#id#,ledOffset#id#);
         }
       }
     });

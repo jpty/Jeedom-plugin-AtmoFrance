@@ -57,7 +57,7 @@
           if(_options.display_value.length > 10)
             dateTxt = d.toLocaleString(language, {dateStyle: "full",timeStyle: "medium"});
           else
-            dateTxt = d.toLocaleString(language, {dateStyle: "full"});
+            dateTxt = d.toLocaleString(language, {month:'long',day:'numeric',weekday:'long'});
           txt = dateTxt.charAt(0).toUpperCase() + dateTxt.slice(1); // ucfirst
         }
         else if('#type#' == 'timestamp') {
