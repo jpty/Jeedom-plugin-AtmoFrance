@@ -47,11 +47,16 @@ if (!isConnect()) {
             </div>
         </div>
         <div class="form-group">
-            <label class="col-lg-2 control-label">{{Pour plus d'informations:}}</label>
+            <label class="col-lg-2 control-label">{{Source des données &copy;}}</label>
             <div class="col-lg-6">
-              <a target="_blank" href="https://www.atmo-france.org/">Site Atmo France</a> &nbsp; &nbsp;
-              <a target="_blank" href="http://admindata.atmo-france.org/auth/fr/login">Accés à l'API</a>
+              <a target="_blank" href="https://www.atmo-france.org/">Atmo France</a> et les Associations agréées de surveillance de la qualité de l’air.(AASQA)
             </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-2 control-label">{{Pour plus d'informations}}</label>
+            <div class="col-lg-6">
+              <a target="_blank" href="http://admindata.atmo-france.org/auth/fr/login">Accés à l'API</a>
+          </div>
         </div>
   </fieldset>
 </form>

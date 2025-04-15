@@ -18,17 +18,18 @@
 
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
-function template_install() {
-    
+// Fonction exécutée automatiquement après l'installation du plugin
+function AtmoFrance_install() {
 }
 
-function template_update() {
-    
+// Fonction exécutée automatiquement après la mise à jour du plugin
+function AtmoFrance_update() {
+  foreach (eqLogic::byType('AtmoFrance') as $eqLogic) {
+    $eqLogic->save();
+    log::add('AtmoFrance', 'debug', 'Mise à jour des commandes de l\'équipement '. $eqLogic->getHumanName() ." effectuée.");
+  }
 }
 
-
-function template_remove() {
-    
+// Fonction exécutée automatiquement après la suppression du plugin
+function AtmoFrance_remove() {
 }
-
-?>
