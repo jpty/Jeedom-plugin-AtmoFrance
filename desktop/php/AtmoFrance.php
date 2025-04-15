@@ -8,8 +8,9 @@ $plugin = plugin::byId($pluginName);
 sendVarToJS('eqType', $plugin->getId());
 sendVarToJs('pluginName', $pluginName);
 $eqLogics = eqLogic::byType($plugin->getId());
-$id = $_GET['id'] ?? -1;
-// message::add("AtmoFrance", "ID eqLogic $id");
+// $id = init('id');
+// message::add($pluginName, "ID eqLogic $id");
+
 ?>
 
 <div class="row row-overflow">
@@ -136,7 +137,7 @@ $id = $_GET['id'] ?? -1;
               <div class="col-sm-4">
                 <select id="sel_object" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="typeEquipment">
                   <option value="pollens">Pollens</option>
-                  <!-- <option value="aqi">AQI</option> -->
+                  <option value="aqi">Indice ATMO</option>
                 </select>
               </div>
             </div>
@@ -152,42 +153,15 @@ $id = $_GET['id'] ?? -1;
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">{{Commune}}</label>
+              <label class="col-sm-3 control-label"></label>
+              <div class="col-sm-4">
+                <div id="zipFeedback" style="font-size:0.9em;line-height:1;"></div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-3 control-label">{{Commune (INSEE,EPCI)}}</label>
               <div class="col-sm-4 input-group">
-                <select id="codeZone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="codeZone">
-                  <?php
-                    $found =0; $nb=0;
-                    if($id != -1) {
-                      $eqLogic = eqLogic::byId($id);
-                      $zipCode = $eqLogic->getConfiguration("zipCode", -1);
-                      $codeZone = $eqLogic->getConfiguration("codeZone", -1);
-                      if($zipCode != -1) {
-                        $insees = AtmoFrance::getCodeInseeFromZipCode($zipCode);
-                        if(count($insees) == 1) {
-                          $insee = $insees[0];
-                          $value = $insee->code .',' .$insee->codeEpci; $name = $insee->nom;
-                          echo "<option value=\"$value\" selected>$name</option>";
-                          $found =1; $nb=1;
-                        }
-                        else {
-                          foreach($insees as $insee) {
-                            $value = $insee->code .',' .$insee->codeEpci; $name = $insee->nom;
-                            if($value == $codeZone) {
-                              echo "<option value=\"$value\" selected>$name</option>";
-                              $found++;
-                            }
-                            else echo "<option value=\"$value\">$name</option>";
-                            $nb++;
-                          }
-                        }
-                      }
-                    }
-                    if(!$found && $nb) {
-                      echo "<option value=\"\" selected>Sélectionner une commune</option>";
-                    }
-                    elseif(!$nb) echo "<option value=\"\" selected>Rechercher une commune</option>";
-                  ?>
-                </select>
+                <input id="codeZone" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="codeZone"/>
               </div>
             </div>
 <!--

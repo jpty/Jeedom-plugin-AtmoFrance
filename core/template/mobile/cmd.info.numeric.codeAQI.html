@@ -4,7 +4,7 @@
   <template>
     <div>blinkLevel: {{Niveau à partir duquel la puce doit clignoter. Défaut: 6}}</div>
     <div>colorDef: {{Couleur de l'icône si valeur de la commande < 0 ou >= 6. Défaut: #838383}}</div>
-    <div>iconSize: {{Taille de l'icône. Défaut: 14px}}</div>
+    <div>iconSize: {{Taille de l'icône. Défaut: 18px}}</div>
     <div>iconOffset: {{Taille du cercle autour de l'icône. Défaut: 0px}}</div>
   </template>
   <style>
@@ -39,8 +39,8 @@
 
     jeedom.cmd.addUpdateFunction('#id#',function(_options) {
       let blinkLevel#id# = ('#blinkLevel#' != '#' + 'blinkLevel#') ? parseInt("#blinkLevel#") : 6;
-      const desc = [ 'Indisponible', 'Trés faible', 'Faible', 'Modéré', 'Elevé', 'Trés élevé', 'Extrêmement élevé'];
-      const colors = [ '#DDDDDD', '#50F0E6', '#01855E', '#F0E641', '#FF5050', '#960032', '#872181'];
+      const desc = [ 'Indisponible', 'Bon', 'Moyen', 'Dégradé', 'Mauvais', 'Trés mauvais', 'Extrêmement mauvais','Evénement'];
+      const colors=['#DDDDDD','#50F0E6','#01855E','#F0E641','#FF5050','#960032','#872181','#888888'];
       let colorDef#id# = ('#colorDef#' != '#' + 'colorDef#') ? '#colorDef#' : '#838383'; // gris
       let iconOffset#id# = ('#iconOffset#' != '#' + 'iconOffset#') ? '-#iconOffset#' : '0px';
       let iconSize#id# = ('#iconSize#' != '#' + 'iconSize#') ? '#iconSize#' : '18px';
