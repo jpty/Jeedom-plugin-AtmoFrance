@@ -1,0 +1,41 @@
+<div style="margin:0px;padding:0px;min-width:60px" class="cmd #history# tooltips cmd-widget" data-type="info" data-version="#version#" data-eqLogic_id="#eqLogic_id#" data-subtype="numeric" data-cmd_id="#id#" data-cmd_uid="#uid#">
+  <div class="content-xs">
+    <div class="cmdName #hide_name#">#name_display#</div>
+  </div>
+  <div class="pollen#id#"></div>
+  <template>
+    <div>iconSize: {{Taille de l'icone. Défaut: 36}}</div>
+    <div>language: la langue du navigateur par défaut</div>
+  </template>
+  <script>
+    jeedom.cmd.addUpdateFunction('#id#',function(_options) {
+      const desc = [ 'Indisponible', 'Trés faible', 'Faible', 'Modéré', 'Elevé', 'Trés élevé', 'Extrêmement élevé', 'Fin de saison pollinique'];
+      let iconSize#id# = ('#iconSize#' != '#' + 'iconSize#') ? '#iconSize#' : '36';
+      if (is_object(cmd = document.querySelector('.cmd[data-cmd_uid="#uid#"]'))) {
+        let language = [];
+        if ('#'+'language#' != '#language#') language = '#language#';
+        let vDateTxt = new Date(_options.valueDate).toLocaleString(language, {dateStyle: "full",timeStyle: "medium"});
+        let cDateTxt = new Date(_options.collectDate).toLocaleString(language, {dateStyle: "full",timeStyle: "medium"});
+        cmd.querySelector('.content-xs').setAttribute('title', '{{Date de valeur}}: ' + vDateTxt + '<br>{{Date de collecte}}: ' + cDateTxt)
+        let valeur = _options.display_value;
+        let cmdIcon#id# = cmd.querySelector('.pollen#id#');
+        cmdIcon#id#.style.width = iconSize#id#;
+        cmdIcon#id#.style.height = iconSize#id#;
+        cmdIcon#id#.style.animation = 'none';
+        cmdIcon#id#.innerHTML = '';
+        if (valeur >= 0 && valeur < 8) {
+          cmdIcon#id#.title = desc[valeur];
+          const imgElement = document.createElement('img');
+          imgElement.src = 'plugins/AtmoFrance/core/template/images/indice_interpollen_'+valeur+'.svg';
+          imgElement.width = iconSize#id#;
+          imgElement.height = iconSize#id#;
+          cmdIcon#id#.appendChild(imgElement);
+        }
+        else {
+          cmdIcon#id#.innerHtml = "Unknown icon for value "+valeur;
+        }
+      }
+    });
+    jeedom.cmd.refreshValue([{cmd_id:'#id#',display_value: '#state#', valueDate: '#valueDate#', collectDate: '#collectDate#', alertLevel: '#alertLevel#', unit: '#unite#'}]);
+  </script>
+</div>

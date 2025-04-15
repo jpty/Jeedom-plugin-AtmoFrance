@@ -30,7 +30,7 @@ try {
     // message::add('AtmoFrance', "getInsee");
     $zipCode = init('zipCode');
     if (!preg_match('/^\d{5}$/', $zipCode)) {
-        ajax::error('Code postal invalide');
+        ajax::error('Le code postal doit avoir 5 chiffres');
     }
 
     $url = 'https://geo.api.gouv.fr/communes?codePostal=' . urlencode($zipCode) . '&fields=nom,code,codeEpci&format=json';
