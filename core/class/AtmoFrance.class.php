@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+// declare(strict_types=1);
 /* This file is part of Jeedom.
  *
  * Jeedom is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@ declare(strict_types=1);
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class AtmoFrance extends eqLogic {
-  public static $_widgetPossibility = array('custom' => true, 'custom::layout' => false);
+  public static $_widgetPossibility = array('custom' => true, 'custom::layout' => true);
 
   public static function cronDaily() {
     foreach (eqLogic::byType(__CLASS__, true) as $eqLogic) {
@@ -659,19 +659,19 @@ log::add(__CLASS__, 'debug', "    Purging data Day: $J");
     return 0;
   }
 
-  public function requestData2API($typeEquipment,$params, $insee): ?array {
+  public function requestData2API($typeEquipment,$params, $inseeEpci): ?array {
 log::add(__CLASS__, 'debug', __FUNCTION__ ." [" .$this->getName() ."]");
     $dateDeb = date('Y-m-d',strtotime("today"));
     $dateFin = date('Y-m-d',strtotime("+3 days"));
     if($typeEquipment == 'pollens')
-      $url = "https://admindata.atmo-france.org/api/v2/data/indices/{$typeEquipment}?format=geojson&date=$dateFin&date_historique={$dateDeb}&code_zone={$insee}&with_geom=false";
+      $url = "https://admindata.atmo-france.org/api/v2/data/indices/{$typeEquipment}?format=geojson&date=$dateFin&date_historique={$dateDeb}&code_zone={$inseeEpci}&with_geom=false";
     elseif($typeEquipment == 'aqi')
-      $url = "https://admindata.atmo-france.org/api/v2/data/indices/atmo?format=geojson&date=$dateFin&date_historique={$dateDeb}&code_zone={$insee}";
+      $url = "https://admindata.atmo-france.org/api/v2/data/indices/atmo?format=geojson&date=$dateFin&date_historique={$dateDeb}&code_zone={$inseeEpci}";
     log::add(__CLASS__, 'debug', "  URL: $url");
     $jsonDec = $this->getResource($params, $url);
     $loglevel = log::convertLogLevel(log::getLogLevel(__CLASS__));
     if($loglevel == 'debug') {
-      $file = __DIR__ ."/../../data/$typeEquipment-$insee.json";
+      $file = __DIR__ ."/../../data/{$typeEquipment}-{$inseeEpci}.json";
       $hdle = fopen($file, "wb");
       if($hdle !== FALSE) {
         if($jsonDec) fwrite($hdle, json_encode($jsonDec));
@@ -723,7 +723,7 @@ log::add(__CLASS__, 'debug', "  Caller $fctCaller LastCallerData $lastCallData N
     $cr = $this->initParams($params);
     if($cr != 0) throw new Exception("Pb initParams: $cr");
     if($typeEquipment == 'pollens' || $typeEquipment == 'aqi') {
-      $jsonDec = $this->requestData2API($typeEquipment, $params, $insee);
+      $jsonDec = $this->requestData2API($typeEquipment, $params, $inseeEpci);
       if($jsonDec !== null) {
         $this->setConfiguration('lastCallData', $inseeEpci); // memo
         $this->save(true);
