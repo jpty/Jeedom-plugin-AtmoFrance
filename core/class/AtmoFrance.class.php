@@ -30,7 +30,7 @@ class AtmoFrance extends eqLogic {
   }
 
   public function updateDataFromJsonCmdValue($typeEquipment) : int {
-    log::add(__CLASS__, 'debug', __FUNCTION__ ." {$typeEquipment} [" .$this->getName());
+    log::add(__CLASS__, 'debug', "    ".__FUNCTION__ ." {$typeEquipment} [" .$this->getName() ."]");
     $Cmd = $this->getCmd(null, "{$typeEquipment}Json");
     if(is_object($Cmd)) {
       $cmdValue = $Cmd->execCmd();
@@ -189,7 +189,7 @@ class AtmoFrance extends eqLogic {
   public function preInsert() {
     $this->setIsVisible(1);
     $this->setIsEnable(1);
-    $this->setConfiguration('displayNDays',3);
+    $this->setConfiguration('zipCode', config::byKey('info::postalCode'));
     $this->setConfiguration('typeEquipment','pollens');
   }
 
@@ -544,7 +544,7 @@ log::add(__CLASS__, 'debug', "End of " .__FUNCTION__ ." " .$this->getName());
     $changed = false;
     if($dec !== null && isset($dec['features'])) {
       for($J=0;$J<3;$J++) {
-    log::add(__CLASS__, 'debug', __FUNCTION__ ." J$J {$typeEquipment} [" .$this->getName());
+//    log::add(__CLASS__, 'debug', __FUNCTION__ ." J$J {$typeEquipment} [" .$this->getName());
         $propFound = 0;
         $dateJ = date('Y-m-d',strtotime("+$J days"));
         foreach($dec['features'] as $feature) {
@@ -552,7 +552,7 @@ log::add(__CLASS__, 'debug', "End of " .__FUNCTION__ ." " .$this->getName());
           $date_ech = $properties['date_ech']; // mesures de ce jour.
           if($date_ech == $dateJ) {
             $propFound = 1;
-            log::add(__CLASS__, 'debug', "    Processing $date_ech Day: $J");
+            log::add(__CLASS__, 'debug', "      Processing $date_ech Day: $J");
             if($J == 0) {
               $changed = $this->checkAndUpdateCmd("date_maj",$properties['date_maj']) || $changed;
               $changed = $this->checkAndUpdateCmd("aasqa",$properties['aasqa']) || $changed;
@@ -591,7 +591,7 @@ log::add(__CLASS__, 'debug', "End of " .__FUNCTION__ ." " .$this->getName());
             $changed = $this->checkAndUpdateCmd("lib_zone",'') || $changed;
             $changed = $this->checkAndUpdateCmd("source",'') || $changed;
           }
-log::add(__CLASS__, 'debug', "    Purging data Day: $J");
+log::add(__CLASS__, 'debug', "      Purging data Day: $J");
           $changed = $this->checkAndUpdateCmd("date_echJ$J",$dateJ) || $changed;
           $changed = $this->checkAndUpdateCmd("code_qualJ$J", 0) || $changed;
           if($typeEquipment == 'pollens') {
@@ -637,7 +637,8 @@ log::add(__CLASS__, 'debug', "    Purging data Day: $J");
     if($nb == 1) $insee = trim($arrCode[0]);
     else if($nb == 2) {
       $insee = trim($arrCode[0]);
-      $epci = trim($arrCode[1]); if($epci == '----') $epci = '';
+      $epci = trim($arrCode[1]);
+      if($epci == '----') { $epci = ''; $inseeEpci = $insee; }
     }
     else {
       log::add(__CLASS__, 'warning', "Format du champ 'Commune (INSEE,EPCI)' incorrect.");
